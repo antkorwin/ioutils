@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 /**
  * Created on 10/08/2020
  * <p>
- * TODO: replace on the JavaDoc
+ * Tools to read files in resources
  *
  * @author Korovin Anatoliy
  */
@@ -25,6 +25,11 @@ public class ResourceFile {
 		this.fileName = fileName;
 	}
 
+	/**
+	 * Read a file content to the String value
+	 *
+	 * @return file content as string
+	 */
 	public String read() {
 		try (InputStream inputStream = getResourceStream()) {
 			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
@@ -33,6 +38,9 @@ public class ResourceFile {
 		}
 	}
 
+	/**
+	 * @return file from resources
+	 */
 	public File getFile() {
 		String filePath = startFilenameWithoutSlash();
 		return new File(getClass().getClassLoader()
@@ -40,6 +48,9 @@ public class ResourceFile {
 		                          .getFile());
 	}
 
+	/**
+	 * @return InputStream of the file from resources
+	 */
 	public InputStream getInputStream() {
 		try {
 			return getResourceStream();
