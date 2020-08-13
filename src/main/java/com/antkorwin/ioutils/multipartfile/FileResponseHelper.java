@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.http.HttpServletResponse;
 
-import com.antkorwin.ioutils.error.InternalException;
+import com.antkorwin.throwable.functions.ThrowableSupplier;
 import com.antkorwin.throwable.functions.ThrowableWrapper;
 import org.apache.commons.io.IOUtils;
 
@@ -23,36 +23,34 @@ public class FileResponseHelper {
 	 * Формирует HTTP ответ с бинарным фалйом и выставляет заголовки
 	 * для имения файла и типа вложения
 	 *
-	 * @param content            контент для отправки
-	 * @param mimeType           тип контента
-	 * @param contentDisposition header Content-Disposition
-	 * @param response           HttpServletResponse в который будет скопирован стрим с данными
+	 * @param contentStreamSupplier контент для отправки
+	 * @param mimeType              тип контента
+	 * @param contentDisposition    header Content-Disposition
+	 * @param response              HttpServletResponse в который будет скопирован стрим с данными
 	 */
-	public static void makeResponseWithFile(InputStream content,
+	public static void makeResponseWithFile(ThrowableSupplier<InputStream> contentStreamSupplier,
 	                                        String mimeType,
 	                                        String contentDisposition,
 	                                        HttpServletResponse response) {
 		ThrowableWrapper.run(() -> {
-			internalMakeResponseWithFile(content,
+			internalMakeResponseWithFile(contentStreamSupplier,
 			                             mimeType,
 			                             contentDisposition,
 			                             response);
 		});
 	}
 
-	private static void internalMakeResponseWithFile(InputStream content,
+	private static void internalMakeResponseWithFile(ThrowableSupplier<InputStream> contentStreamSupplier,
 	                                                 String mimeType,
 	                                                 String contentDisposition,
 	                                                 HttpServletResponse response) throws IOException {
-		if (content == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			throw new InternalException("Content must be not null in `internalMakeResponseWithFile(null,${mimeType},${contentDisposition},${response})");
-		}
 
-		response.setContentType(mimeType);
-		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
-		IOUtils.copy(content, response.getOutputStream());
-		response.flushBuffer();
-		response.setStatus(HttpServletResponse.SC_OK);
+		try (InputStream inputStreamContent = contentStreamSupplier.get()) {
+			response.setContentType(mimeType);
+			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
+			IOUtils.copy(inputStreamContent, response.getOutputStream());
+			response.flushBuffer();
+			response.setStatus(HttpServletResponse.SC_OK);
+		}
 	}
 }
