@@ -8,18 +8,18 @@ import com.antkorwin.throwable.functions.ThrowableWrapper;
 /**
  * Created on 21/05/2020
  * <p>
- * Используется для построения значения в header ContentDisposition
+ * Factory to build a value of the ContentDisposition header
  *
  * @author Korovin Anatoliy
  */
 public class ContentDispositionFactory {
 
 	/**
-	 * Формирует ContentDisposition по имения файла
-	 * при этом конвертирует имя файла в формат application/x-www-form-urlencoded
+	 * Build a ContentDisposition from the name of file,
+	 * uses UTF-8 charset and converts filename to the `application/x-www-form-urlencoded`
 	 *
-	 * @param filename имя файла
-	 * @return построенный ContentDisposition
+	 * @param filename filename
+	 * @return ContentDisposition as String value
 	 */
 	public static String getWithUtf8Filename(String filename) {
 		return ThrowableWrapper.get(() -> {
@@ -32,11 +32,10 @@ public class ContentDispositionFactory {
 	}
 
 	/**
-	 * Заменяет все символы не входящие в ASCII, в имени фала на символ _
-	 * и формирует ContentDisposition
+	 * Replace all non-ASCII symbols on `_` and build ContentDisposition
 	 *
-	 * @param filename исходное имя файла
-	 * @return сформированный ContentDisposition
+	 * @param filename file name
+	 * @return ContentDisposition
 	 */
 	public static String getWithAsciiFilename(String filename) {
 		String escapedname = makeSafeFileName(filename);
