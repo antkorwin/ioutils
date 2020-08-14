@@ -42,6 +42,11 @@ public class ResourceFile {
 		}
 	}
 
+	/**
+	 * Read a file content to string value
+	 *
+	 * @return file content as String
+	 */
 	public String readAsString() {
 		try (InputStream inputStream = getResourceStream()) {
 			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
@@ -50,6 +55,11 @@ public class ResourceFile {
 		}
 	}
 
+	/**
+	 * Read a file content as byte array
+	 *
+	 * @return file content as byte array
+	 */
 	public byte[] readAsByteArray() {
 		try (InputStream inputStream = getResourceStream()) {
 			return IOUtils.toByteArray(inputStream);
@@ -58,6 +68,11 @@ public class ResourceFile {
 		}
 	}
 
+	/**
+	 * Write a file content to the OutputStream
+	 *
+	 * @param destinationStreamSupplier destination stream supplier
+	 */
 	public void write(ThrowableSupplier<OutputStream> destinationStreamSupplier) {
 		try (OutputStream outputStream = destinationStreamSupplier.get()) {
 			IOUtils.write(readAsByteArray(), outputStream);
