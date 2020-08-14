@@ -15,8 +15,11 @@ import org.springframework.http.HttpHeaders;
  * Утиль для формирования HTTP ответа сервера
  * с вложенным бинарным файлом
  *
+ * @see FileResponse
+ *
  * @author Korovin Anatoliy
  */
+@Deprecated
 public class FileResponseHelper {
 
 	/**

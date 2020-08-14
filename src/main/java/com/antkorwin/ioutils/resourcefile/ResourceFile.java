@@ -3,12 +3,13 @@ package com.antkorwin.ioutils.resourcefile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import com.antkorwin.ioutils.error.InternalException;
+import com.antkorwin.throwable.functions.ThrowableSupplier;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -28,8 +29,9 @@ public class ResourceFile {
 
 	/**
 	 * Read a file content to the String value
-	 * @see ResourceFile#readAsString()
+	 *
 	 * @return file content as string
+	 * @see ResourceFile#readAsString()
 	 */
 	@Deprecated
 	public String read() {
@@ -53,6 +55,14 @@ public class ResourceFile {
 			return IOUtils.toByteArray(inputStream);
 		} catch (Exception e) {
 			throw new InternalException("Error while reading the data from file: " + fileName, e);
+		}
+	}
+
+	public void write(ThrowableSupplier<OutputStream> destinationStreamSupplier) {
+		try (OutputStream outputStream = destinationStreamSupplier.get()) {
+			IOUtils.write(readAsByteArray(), outputStream);
+		} catch (IOException e) {
+			throw new InternalException("Error while writing data in the stream", e);
 		}
 	}
 
