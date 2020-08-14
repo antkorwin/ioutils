@@ -3,6 +3,7 @@ package com.antkorwin.ioutils.resourcefile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,12 +28,29 @@ public class ResourceFile {
 
 	/**
 	 * Read a file content to the String value
-	 *
+	 * @see ResourceFile#readAsString()
 	 * @return file content as string
 	 */
+	@Deprecated
 	public String read() {
 		try (InputStream inputStream = getResourceStream()) {
 			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			throw new InternalException("Error while reading the data from file: " + fileName, e);
+		}
+	}
+
+	public String readAsString() {
+		try (InputStream inputStream = getResourceStream()) {
+			return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+		} catch (Exception e) {
+			throw new InternalException("Error while reading the data from file: " + fileName, e);
+		}
+	}
+
+	public byte[] readAsByteArray() {
+		try (InputStream inputStream = getResourceStream()) {
+			return IOUtils.toByteArray(inputStream);
 		} catch (Exception e) {
 			throw new InternalException("Error while reading the data from file: " + fileName, e);
 		}

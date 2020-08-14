@@ -13,16 +13,23 @@ class ResourceFileTest {
 
 	@Test
 	void readTextFile() {
-		String content = new ResourceFile("/test.txt").read();
+		String content = new ResourceFile("/test.txt").readAsString();
 		assertThat(content).containsSubsequence("q1w2e3r4t5",
 		                                        "1234566789");
 	}
 
 	@Test
 	void readTextFileWithoutDash() {
-		String content = new ResourceFile("test.txt").read();
+		String content = new ResourceFile("test.txt").readAsString();
 		assertThat(content).containsSubsequence("q1w2e3r4t5",
 		                                        "1234566789");
+	}
+
+	@Test
+	void readTextFileAsByteArray() {
+		byte[] content = new ResourceFile("/test.txt").readAsByteArray();
+		assertThat(new String(content)).containsSubsequence("q1w2e3r4t5",
+		                                                    "1234566789");
 	}
 
 	@Test
