@@ -6,9 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.antkorwin.ioutils.multipartfile.ContentDispositionFactory;
-import com.antkorwin.ioutils.multipartfile.CustomMultipartFile;
-import com.antkorwin.ioutils.multipartfile.FileResponseHelper;
 import feign.Feign;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -122,7 +119,7 @@ public class CustomMultipartFileTest {
 
 				ByteArrayInputStream content = new ByteArrayInputStream("data:${id}".getBytes());
 				String contentDisposition = ContentDispositionFactory.getWithUtf8Filename("name.test");
-				FileResponseHelper.makeResponseWithFile(content, "mime/test", contentDisposition, response);
+				FileResponseHelper.makeResponseWithFile(() -> content, "mime/test", contentDisposition, response);
 			}
 
 			@PostMapping(value = "/upload")

@@ -12,7 +12,7 @@ import org.apache.commons.io.IOUtils;
 /**
  * Created on 30/06/2020
  * <p>
- * Заворачивает стрим во временный файл
+ * Tools to work with temporary files
  *
  * @author Korovin Anatoliy
  */
@@ -20,6 +20,12 @@ import org.apache.commons.io.IOUtils;
 public class TempFile {
 
 
+	/**
+	 * create a temporary file from InputStream
+	 *
+	 * @param inputStreamSupplier supplier for the InputStream
+	 * @return created temporary file
+	 */
 	public static File createFromInputStream(ThrowableSupplier<InputStream> inputStreamSupplier) {
 		return ThrowableWrapper.get(() -> {
 
@@ -35,7 +41,24 @@ public class TempFile {
 		});
 	}
 
+	/**
+	 * see {@link TempFile#createEmpty()} method
+	 */
+	@Deprecated
 	public static File create() {
+		return ThrowableWrapper.get(() -> {
+			final File tempFile = File.createTempFile("ioutils-", ".tmp");
+			tempFile.deleteOnExit();
+			return tempFile;
+		});
+	}
+
+	/**
+	 * Create an empty temporary file
+	 *
+	 * @return created file
+	 */
+	public static File createEmpty() {
 		return ThrowableWrapper.get(() -> {
 			final File tempFile = File.createTempFile("ioutils-", ".tmp");
 			tempFile.deleteOnExit();
