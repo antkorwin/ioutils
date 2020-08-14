@@ -41,6 +41,9 @@ public class FileResponse {
 	 * Entry point to build a response with the MultipartFile
 	 */
 	public HttpServletResponse build() {
+		// The order of operations in this method is importance
+		// if you change this please check a result with a real tomcat server
+		// TODO: write integration tests on this flavor
 
 		// mime-type
 		if (!StringUtils.isEmpty(mimeType)) {
