@@ -12,7 +12,6 @@ import com.antkorwin.ioutils.error.InternalException;
 import com.antkorwin.throwable.functions.ThrowableSupplier;
 import org.apache.commons.io.IOUtils;
 
-import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
@@ -30,7 +29,7 @@ public class FileResponse {
 	private String filename;
 	private String mimeType;
 	private HttpServletResponse response;
-	private ContentDisposition contentDisposition;
+	private String contentDisposition;
 	private HttpStatus responseStatus;
 
 	public static FileResponse builder() {
@@ -52,7 +51,7 @@ public class FileResponse {
 
 		// content-disposition
 		if (contentDisposition != null) {
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, contentDisposition);
 		}
 
 		// filename
@@ -106,13 +105,8 @@ public class FileResponse {
 		return this;
 	}
 
-	public FileResponse contentDisposition(ContentDisposition contentDisposition) {
-		this.contentDisposition = contentDisposition;
-		return this;
-	}
-
 	public FileResponse contentDisposition(String contentDisposition) {
-		this.contentDisposition = ContentDisposition.parse(contentDisposition);
+		this.contentDisposition = contentDisposition;
 		return this;
 	}
 
