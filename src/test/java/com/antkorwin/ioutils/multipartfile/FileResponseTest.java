@@ -29,7 +29,7 @@ class FileResponseTest {
 		FileResponse.builder()
 		            .file(() -> stream)
 		            .filename(filename)
-		            .contentDisposition(contentDisposition)
+		            .contentDisposition(contentDisposition.toString())
 		            .mimeType(mimeType)
 		            .response(mockResponse)
 		            .build();
