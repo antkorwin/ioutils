@@ -1,5 +1,6 @@
 package com.antkorwin.ioutils;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -39,6 +40,16 @@ public class TempFile {
 			}
 			return tempFile;
 		});
+	}
+
+	/**
+	 * Create a temp file with the content from string argument value
+	 *
+	 * @param fileContent string value of the file content
+	 * @return created temp file
+	 */
+	public static File createFromString(String fileContent) {
+		return TempFile.createFromInputStream(() -> new ByteArrayInputStream(fileContent.getBytes()));
 	}
 
 	/**

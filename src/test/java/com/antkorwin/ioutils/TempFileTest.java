@@ -42,6 +42,16 @@ class TempFileTest {
 	}
 
 	@Test
+	void createFromString() throws IOException {
+		// Act
+		File file = TempFile.createFromString("foo-bar");
+		// Assert
+		assertThat(file.exists()).isTrue();
+		String content = FileUtils.readFileToString(file);
+		assertThat(content).isEqualTo("foo-bar");
+	}
+
+	@Test
 	void testDeleteOnExit() {
 		//TODO
 	}
