@@ -3,7 +3,9 @@ package com.antkorwin.ioutils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
+import com.antkorwin.throwable.functions.ThrowableSupplier;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
@@ -54,5 +56,31 @@ class TempFileTest {
 	@Test
 	void testDeleteOnExit() {
 		//TODO
+	}
+
+	@Test
+	void createWithExtensionFromStream() {
+		ThrowableSupplier<InputStream> data = () -> new ByteArrayInputStream("12345".getBytes());
+		String extension = "doc";
+		// Act
+		File file = TempFile.createFromInputStream(data, extension);
+		// Assert
+		assertThat(file.getPath().matches("^*.*\\.doc")).isTrue();
+	}
+
+	@Test
+	void createWithExtensionFromString() {
+		// Act
+		File file = TempFile.createFromString("data", "doc");
+		// Assert
+		assertThat(file.getPath().matches("^*.*\\.doc")).isTrue();
+	}
+
+	@Test
+	void defaultExtension() {
+		// Act
+		File file = TempFile.createFromString("data");
+		// Assert
+		assertThat(file.getPath().matches("^*.*\\.tmp")).isTrue();
 	}
 }
