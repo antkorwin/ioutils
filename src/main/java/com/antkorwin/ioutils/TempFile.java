@@ -20,6 +20,25 @@ import org.apache.commons.io.IOUtils;
 @RequiredArgsConstructor
 public class TempFile {
 
+	/**
+	 * create a temporary file from InputStream
+	 *
+	 * @param inputStreamSupplier supplier for the InputStream
+	 * @param extension           target file extension
+	 * @return created temporary file
+	 */
+	public static File createFromInputStream(ThrowableSupplier<InputStream> inputStreamSupplier, String extension) {
+		return ThrowableWrapper.get(() -> {
+			final File tempFile = File.createTempFile("ioutils-", "." + extension);
+			tempFile.deleteOnExit();
+			try (InputStream inputStream = inputStreamSupplier.get();
+			     FileOutputStream out = new FileOutputStream(tempFile)) {
+				// copy data from stream to file
+				IOUtils.copy(inputStream, out);
+			}
+			return tempFile;
+		});
+	}
 
 	/**
 	 * create a temporary file from InputStream
@@ -28,18 +47,7 @@ public class TempFile {
 	 * @return created temporary file
 	 */
 	public static File createFromInputStream(ThrowableSupplier<InputStream> inputStreamSupplier) {
-		return ThrowableWrapper.get(() -> {
-
-			final File tempFile = File.createTempFile("ioutils-", ".tmp");
-			tempFile.deleteOnExit();
-
-			try (InputStream inputStream = inputStreamSupplier.get();
-			     FileOutputStream out = new FileOutputStream(tempFile)) {
-
-				IOUtils.copy(inputStream, out);
-			}
-			return tempFile;
-		});
+		return createFromInputStream(inputStreamSupplier, "tmp");
 	}
 
 	/**
@@ -50,6 +58,18 @@ public class TempFile {
 	 */
 	public static File createFromString(String fileContent) {
 		return TempFile.createFromInputStream(() -> new ByteArrayInputStream(fileContent.getBytes()));
+	}
+
+	/**
+	 * Create a temp file with the content from string argument value
+	 *
+	 * @param fileContent string value of the file content
+	 * @param extension   target file extension
+	 * @return created temp file
+	 */
+	public static File createFromString(String fileContent, String extension) {
+		return TempFile.createFromInputStream(() -> new ByteArrayInputStream(fileContent.getBytes()),
+		                                      extension);
 	}
 
 	/**
