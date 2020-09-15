@@ -64,6 +64,7 @@ public class TempFile {
 	 * Create a temp file with the content from string argument value
 	 *
 	 * @param fileContent string value of the file content
+	 * @param extension   target file extension
 	 * @return created temp file
 	 */
 	public static File createFromString(String fileContent, String extension) {
