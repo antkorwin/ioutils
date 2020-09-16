@@ -73,18 +73,6 @@ public class TempFile {
 	}
 
 	/**
-	 * see {@link TempFile#createEmpty()} method
-	 */
-	@Deprecated
-	public static File create() {
-		return ThrowableWrapper.get(() -> {
-			final File tempFile = File.createTempFile("ioutils-", ".tmp");
-			tempFile.deleteOnExit();
-			return tempFile;
-		});
-	}
-
-	/**
 	 * Create an empty temporary file
 	 *
 	 * @return created file

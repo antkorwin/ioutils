@@ -38,6 +38,8 @@ public class FileResponse {
 
 	/**
 	 * Entry point to build a response with the MultipartFile
+	 *
+	 * @return prepared {@link HttpServletResponse} with all necessary fields
 	 */
 	public HttpServletResponse build() {
 		// The order of operations in this method is importance
