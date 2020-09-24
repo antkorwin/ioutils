@@ -1,9 +1,12 @@
 package com.antkorwin.ioutils.multipartfile;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 
 import com.antkorwin.ioutils.error.InternalException;
 import com.antkorwin.throwable.functions.ThrowableSupplier;
@@ -46,10 +49,12 @@ public class CustomMultipartFile implements MultipartFile {
 	                           String originalFileName,
 	                           String fileContentAsString,
 	                           byte[] fileContentAsBytes,
+	                           File fileContentFromFile,
 	                           ThrowableSupplier<InputStream> fileContentAsInputStream) {
 
 		if (fileContentAsInputStream == null) {
-			fileContentAsInputStream = getInputStreamSupplier(fileContentAsString,
+			fileContentAsInputStream = getInputStreamSupplier(fileContentFromFile,
+			                                                  fileContentAsString,
 			                                                  fileContentAsBytes);
 		}
 
@@ -66,8 +71,13 @@ public class CustomMultipartFile implements MultipartFile {
 	/**
 	 * Retrieves the file content from string or bytes values, if the InputStreamSupplier isn't set.
 	 */
-	private ThrowableSupplier<InputStream> getInputStreamSupplier(String fileContentAsString,
+	private ThrowableSupplier<InputStream> getInputStreamSupplier(File fileContentFromFile,
+	                                                              String fileContentAsString,
 	                                                              byte[] fileContentAsBytes) {
+
+		if(fileContentFromFile != null){
+			return () -> new FileInputStream(fileContentFromFile);
+		}
 
 		if (fileContentAsBytes != null) {
 			return () -> new ByteArrayInputStream(fileContentAsBytes);

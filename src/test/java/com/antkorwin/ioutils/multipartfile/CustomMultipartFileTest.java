@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.antkorwin.ioutils.TempFile;
 import feign.Feign;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,6 +97,22 @@ public class CustomMultipartFileTest {
 		                                                       .dataFieldName("data")
 		                                                       .contentType(MediaType.TEXT_PLAIN.toString())
 		                                                       .fileContentAsString("q1w2e3r4t5")
+		                                                       .originalFileName("test.txt")
+		                                                       .build();
+		// Act
+		testFeign.create(multipartFile);
+		// Assert
+		assertThat(TestApiConfig.requestHolder).contains("q1w2e3r4t5");
+	}
+
+	@Test
+	void uploadFileContentFromFile() {
+		// Arrange
+		File file = TempFile.createFromString("q1w2e3r4t5");
+		CustomMultipartFile multipartFile = CustomMultipartFile.builder()
+		                                                       .dataFieldName("data")
+		                                                       .contentType(MediaType.TEXT_PLAIN.toString())
+		                                                       .fileContentFromFile(file)
 		                                                       .originalFileName("test.txt")
 		                                                       .build();
 		// Act
