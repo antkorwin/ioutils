@@ -32,6 +32,7 @@ class TempFileReference extends PhantomReference<Object> {
 			}
 			return file.delete();
 		} catch (Exception ex) {
+			//TODO: add logging in this lib
 			return false;
 		}
 	}
