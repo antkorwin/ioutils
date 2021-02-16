@@ -5,7 +5,7 @@
 
     <groupId>com.antkorwin</groupId>
     <artifactId>ioutils</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
     <packaging>jar</packaging>
 
     <name>IO-Utils Library</name>
@@ -165,6 +165,13 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
             <version>2.2.3.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.antkorwin</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>1.0</version>
             <scope>test</scope>
         </dependency>
         <!-- TEST -->

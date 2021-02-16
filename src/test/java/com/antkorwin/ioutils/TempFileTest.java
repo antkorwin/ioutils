@@ -14,16 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TempFileTest {
 
 	@Test
-	void createEmptyOld() throws IOException {
-		// Act
-		File file = TempFile.create();
-		// Assert
-		assertThat(file.exists()).isTrue();
-		String content = FileUtils.readFileToString(file);
-		assertThat(content).isEmpty();
-	}
-
-	@Test
 	void createEmpty() throws IOException {
 		// Act
 		File file = TempFile.createEmpty();
