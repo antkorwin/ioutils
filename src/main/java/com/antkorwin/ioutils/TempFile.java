@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import com.antkorwin.ioutils.temp.TempFileReaper;
 import com.antkorwin.throwable.functions.ThrowableSupplier;
 import com.antkorwin.throwable.functions.ThrowableWrapper;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.apache.commons.io.IOUtils;
 @RequiredArgsConstructor
 public class TempFile {
 
+	private static final TempFileReaper tempFileReaper = new TempFileReaper();
+
 	/**
 	 * create a temporary file from InputStream
 	 *
@@ -31,6 +34,7 @@ public class TempFile {
 		return ThrowableWrapper.get(() -> {
 			final File tempFile = File.createTempFile("ioutils-", "." + extension);
 			tempFile.deleteOnExit();
+			tempFileReaper.deleteWhenUnused(tempFile);
 			try (InputStream inputStream = inputStreamSupplier.get();
 			     FileOutputStream out = new FileOutputStream(tempFile)) {
 				// copy data from stream to file
@@ -73,18 +77,6 @@ public class TempFile {
 	}
 
 	/**
-	 * see {@link TempFile#createEmpty()} method
-	 */
-	@Deprecated
-	public static File create() {
-		return ThrowableWrapper.get(() -> {
-			final File tempFile = File.createTempFile("ioutils-", ".tmp");
-			tempFile.deleteOnExit();
-			return tempFile;
-		});
-	}
-
-	/**
 	 * Create an empty temporary file
 	 *
 	 * @return created file
@@ -93,6 +85,7 @@ public class TempFile {
 		return ThrowableWrapper.get(() -> {
 			final File tempFile = File.createTempFile("ioutils-", ".tmp");
 			tempFile.deleteOnExit();
+			tempFileReaper.deleteWhenUnused(tempFile);
 			return tempFile;
 		});
 	}
