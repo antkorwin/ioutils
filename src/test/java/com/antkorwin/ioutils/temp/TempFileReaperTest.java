@@ -63,9 +63,11 @@ class TempFileReaperTest {
 		// await
 		GcUtils.fullFinalization();
 		// assert
-		filenames.forEach(f -> {
-			assertThat(exists(f)).isFalse();
-		});
+		Awaitility.await()
+		          .atMost(5, TimeUnit.SECONDS)
+		          .untilAsserted(() -> {
+			          filenames.forEach(f -> assertThat(exists(f)).isFalse());
+		          });
 	}
 
 	@Test
