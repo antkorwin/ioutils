@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class TempFileReaper {
 
-	private TempFileReaperThread reaperThread;
+	private volatile TempFileReaperThread reaperThread = null;
 	private ReferenceQueue<Object> referenceQueue = new ReferenceQueue<>();
 	private Set<TempFileReference> references = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
