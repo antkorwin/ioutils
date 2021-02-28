@@ -64,7 +64,6 @@ class TempFileReaperTest {
 		GcUtils.fullFinalization();
 		// assert
 		filenames.forEach(f -> {
-			System.out.println(f.toString());
 			assertThat(exists(f)).isFalse();
 		});
 	}
