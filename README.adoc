@@ -65,3 +65,50 @@ And you can set an extension to files (`.tmp` by default):
 ----
 File file = TempFile.createFromString("data file content", "txt");
 ----
+
+
+== Read a file from resources in Java
+
+To simplify working with files in the resource folder,
+you can use the `ResourceFile` class.
+You can read about the main methods in this class below,
+or you can see in the unit test here: https://github.com/antkorwin/ioutils/blob/master/src/test/java/com/antkorwin/ioutils/resourcefile/ResourceFileTest.java[ResourceFileTest.java]
+where describing all API of this class.
+
+Read a file as String:
+
+[source, java]
+----
+String content = new ResourceFile("filename_in_resource_folder.txt").readAsString();
+----
+
+read as a byte array:
+
+[source, java]
+----
+byte[] content = new ResourceFile("/test.txt").readAsByteArray();
+----
+
+get a file from resource:
+
+[source, java]
+----
+File file = new ResourceFile("folder/nestedfile").getFile();
+----
+
+read an InputStream from a file in resources:
+
+[source, java]
+----
+try (InputStream inputStream = new ResourceFile("test.txt").getInputStream()) {
+    ...
+}
+----
+
+write a content of file from resources to the OutputStream:
+
+[source, java]
+----
+ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+new ResourceFile("test.txt").write(() -> outputStream);
+----
