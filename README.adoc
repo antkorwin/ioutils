@@ -1,0 +1,114 @@
+= IOUtils
+:source-highlighter: prettify
+:icons: font
+:toc: top
+:experimental:
+:numbered:
+
+== Dependencies
+
+[source ,xml]
+----
+<dependency>
+    <groupId>com.antkorwin</groupId>
+    <artifactId>ioutils</artifactId>
+    <version>0.8</version>
+</dependency>
+----
+
+== Automatically deleted temp files in Java
+
+There is a standard API to delete a temporary file in java:
+
+[source, java]
+----
+File temp = File.createTempFile("filename", ".tmp");
+temp.deleteOnExit();
+----
+
+But this file will be removed only after exit JVM,
+if your application actively working with temporary files
+then it can lead to the situation when a free space in the temp folder is over,
+or sometimes you should restart your application just to clean the temp folder.
+
+To resolve this problem you can use the `TempFile` from `ioutils`:
+
+[source , java]
+----
+File tmp = TempFile.createEmpty();
+----
+this file will be deleted after a GC collecting the `tmp` object.
+
+WARNING: Please use the temp file only by this file reference (`tmp` variable in the example above)
+if you create a new reference to the temporary file using an absolute path
+then you can’t read this file after GC collects the original reference.
+
+
+Also, we can create non-empty files, creating a file from String:
+
+[source, java]
+----
+File tmp = TempFile.createFromString("text file context");
+----
+
+an InputStream variant:
+
+[source, java]
+----
+ByteArrayInputStream inputStream = new ByteArrayInputStream("file content".getBytes());
+File file = TempFile.createFromInputStream(() -> inputStream);
+----
+
+And you can set an extension to files (`.tmp` by default):
+
+[source, java]
+----
+File file = TempFile.createFromString("data file content", "txt");
+----
+
+
+== Read a file from resources in Java
+
+To simplify working with files in the resource folder,
+you can use the `ResourceFile` class.
+You can read about the main methods in this class below,
+or you can see in the unit test here: https://github.com/antkorwin/ioutils/blob/master/src/test/java/com/antkorwin/ioutils/resourcefile/ResourceFileTest.java[ResourceFileTest.java]
+where describing all API of this class.
+
+Read a file as String:
+
+[source, java]
+----
+String content = new ResourceFile("filename_in_resource_folder.txt").readAsString();
+----
+
+read as a byte array:
+
+[source, java]
+----
+byte[] content = new ResourceFile("/test.txt").readAsByteArray();
+----
+
+get a file from resource:
+
+[source, java]
+----
+File file = new ResourceFile("folder/nestedfile").getFile();
+----
+
+read an InputStream from a file in resources:
+
+[source, java]
+----
+try (InputStream inputStream = new ResourceFile("test.txt").getInputStream()) {
+    ...
+}
+----
+
+write a content of file from resources to the OutputStream:
+
+[source, java]
+----
+ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+new ResourceFile("test.txt").write(() -> outputStream);
+----
