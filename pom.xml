@@ -42,7 +42,7 @@
         <spring-framework.version>5.2.5.RELEASE</spring-framework.version>
         <lombok.version>1.18.12</lombok.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
-        <commons-io.version>2.4</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <better-strings.version>0.3</better-strings.version>
         <throwable-functions.version>1.2</throwable-functions.version>
     </properties>
